@@ -44,24 +44,27 @@ function setup() {
   play.addAnimation("playing",playicon)
   play.scale=0.3/2
 
-  boy=createSprite(50,192,20,50)
+  boy=createSprite(50,350,20,50)
   boy.addAnimation("playing",playerimg)
-  boy.scale=0.2
+  boy.scale=0.4
+  boy.debug=false;
+  boy.setCollider("rectangle",0,0,50,360)
 
-  mainbg = createSprite(300,130,600,200)
+  mainbg = createSprite(300,200)
   mainbg.addImage(mainimg)
-  mainbg.scale = 0.7;
+  mainbg.scale = 1.8;
  // mainbg.velocityX=-3;
 
      
-  ground = createSprite(200,310,400,20);
+  ground = createSprite(200,600);
  ground.addImage(groundimg);
  ground.velocityX = -4;
  ground.x = ground.width /2;
+ ground.scale=1.3
  boy.depth=mainbg.depth
  boy.depth=boy.depth+1
  
- invisibleGround = createSprite(200,220,400,10);
+ invisibleGround = createSprite(100,450,2000,20);
  invisibleGround.visible = false
 
  obstacleGroup = new Group();
@@ -115,13 +118,13 @@ function draw() {
   
 
    if(keyDown("space")&&gameState===1){
-     gameState=2
+    gameState=2
    }
 
  }
 
  if(gameState===2){
-   createCanvas(600,200)
+   createCanvas(1400,550)
    mainbg.visible=true
   ground.visible=true
   boy.visible=true
@@ -173,7 +176,7 @@ function draw() {
   spawnBullets()
   spawnCoins()
 
-  if(score===-40&&gameState===2){
+  if(score===600&&gameState===2){
     gameState=3;
  
   }
@@ -212,18 +215,22 @@ function draw() {
  text("In this level the functions will be the same, the obstacles will be different",340, 185)
  text( "Instead of the bullet now there will be a bomb that will explode",340, 230)
  text("You have to dodge the bomb and collect coins to win" ,340, 280)
- text("Get 600 point to win.. ALL THE BEST",340, 330)
- text("PRESS SPACE TO CONTINUE", 350, 420)
+ text("You can reduce the player's scale to get between the ice obstacles",340,330)
+ text("Get 1000 point to win.. ALL THE BEST",340, 400)
+ text("PRESS SPACE TO CONTINUE", 350, 450)
 
 
 
  if(keyDown("space")&&gameState===3){
   gameState=4
+  score=0
 }
 }
 
 if(gameState===4){
-createCanvas(600,200)
+createCanvas(1400,550)
+
+  
     mainbg.visible=true
    ground.visible=true
    boy.visible=true
@@ -275,22 +282,51 @@ createCanvas(600,200)
 }
   
 
- 
+ if(score===1000&&gameState===4){
+   gameState=5
+ }
   
- 
+ if(gameState===5){
+  createCanvas(displayWidth, displayHeight)
+   background("black")
+
+ bg.visible=false;
+ start.visible =false;;
+ play.visible=false;;
+ mainbg.visible=false;
+ground.visible = false;
+boy.visible = false;
+Obstacles2Group.destroyEach();
+bombGroup.destroyEach();
+coinGroup.destroyEach();
+ObstaclesGroup.destroyEach();
+
+fill("aqua")
+textSize(25)
+textStyle(BOLD)
+text("CONGRATULATIONS!! YOU HAVE WON THE GAME",300,230)
+text("PRESS R TO RESTART THE GAME",320,300)
+ }
+
+ if(keyDown("r")&&gameState===5){
+   gameState=1 
+ }
+
   
  
    drawSprites();
    if(gameState===2){
      fill("black")
    textSize(20)
-  text("Score:"+score,200,35)
+   textStyle(BOLD)
+  text("Score:"+score,450,35)
    }
 
    if(gameState===4){
     fill("black")
   textSize(20)
- text("Score:"+score,200,35)
+  textStyle(BOLD)
+ text("Score:"+score,450,35)
   }
 
   
@@ -318,10 +354,10 @@ createCanvas(600,200)
  
  }
  function spawnObstacles(){
-   if(frameCount%50===0){
-  obstacle = createSprite(600,170,10,40)
+   if(frameCount%150===0){
+  obstacle = createSprite(1800,380,10,40)
      obstacle.velocityX = -6;
-     obstacle.scale = 0.1;
+     obstacle.scale = 0.25;
 
      var rand = Math.round(random(1,4));
     switch(rand) {
@@ -341,23 +377,23 @@ createCanvas(600,200)
 
  function spawnBullets(){
   if(frameCount%250===0){
-    var  bullet = createSprite(600,170,10,40)
+    var  bullet = createSprite(600,270,10,40)
     bullet.velocityX = -20;
     bullet.y = Math.round(random(50,340));
     bullet.addImage(bulletimg);
-    bullet.scale = 0.5;
+    bullet.scale = 0.7;
 
     bulletGroup.add(bullet)
   }
  }
 
   function spawnCoins(){
-    if(frameCount%110===0){
-    var coin = createSprite(600,170,10,40)
+    if(frameCount%100===0){
+    var coin = createSprite(600,270,10,40)
     coin.velocityX = -9;
     coin.y = Math.round(random(30,280));
     coin.addImage(coinimg);
-    coin.scale = 0.5;
+    coin.scale = 1.0;
 
     coinGroup.add(coin)
     }
@@ -365,10 +401,10 @@ createCanvas(600,200)
 
   function spawnObstacle2(){
     if(frameCount%50===0){
-      Ob = createSprite(600,170,10,40)
+      Ob = createSprite(1800,370,10,40)
       Ob.addImage(Obstacleimg)
          Ob.velocityX = -6;
-         Ob.scale = 0.1;
+         Ob.scale = 0.2;
         ObstaclesGroup.add(Ob)
        }
   }
@@ -378,7 +414,7 @@ createCanvas(600,200)
       var obst = createSprite(600,30,10,40)
       obst.addImage(ObstacleImg)
          obst.velocityX = -6;
-         obst.scale = 0.1;
+         obst.scale = 0.2;
         Obstacles2Group.add(obst)
        }
   }
@@ -389,8 +425,9 @@ createCanvas(600,200)
       bomb.velocityX = -15;
       bomb.y = Math.round(random(50,300));
       bomb.addImage(bombimg);
-      bomb.scale = 0.2;
+      bomb.scale = 0.4;
   
       bombGroup.add(bomb)
     }
    }
+  
