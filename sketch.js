@@ -29,7 +29,6 @@ bombimg = loadImage("images/bomb.png")
 }
 
 
-
 function setup() {
   createCanvas(displayWidth, displayHeight);
   bg=createSprite(displayWidth/3, displayHeight/3);
@@ -44,10 +43,10 @@ function setup() {
   play.addAnimation("playing",playicon)
   play.scale=0.3/2
 
-  boy=createSprite(50,350,20,50)
+  boy=createSprite(50,365,20,50)
   boy.addAnimation("playing",playerimg)
   boy.scale=0.5
-  boy.debug=false;
+  boy.debug=true;
   boy.setCollider("rectangle",0,0,50,360)
 
   mainbg = createSprite(displayWidth/2,displayHeight/3,displayWidth,800)
@@ -64,7 +63,7 @@ function setup() {
  boy.depth=mainbg.depth
  boy.depth=boy.depth+1
  
- invisibleGround = createSprite(400,550,800,10);
+ invisibleGround = createSprite(400,560,800,10);
  invisibleGround.visible = false
 
  obstacleGroup = new Group();
@@ -76,7 +75,6 @@ function setup() {
 
  score = 0;
 }
-
 function draw() {
   background(255,255,255); 
  
@@ -118,13 +116,13 @@ function draw() {
   
 
    if(keyDown("space")&&gameState===1){
-     gameState=2
+    gameState=2
    }
 
  }
 
  if(gameState===2){
-   createCanvas(displayWidth-50,displayHeight-50)
+   createCanvas(displayWidth,displayHeight)
    mainbg.visible=true
   ground.visible=true
   boy.visible=true
@@ -176,7 +174,7 @@ function draw() {
   spawnBullets()
   spawnCoins()
 
-  if(score===-40&&gameState===2){
+  if(score===600&&gameState===2){
     gameState=3;
  
   }
@@ -215,8 +213,9 @@ function draw() {
  text("In this level the functions will be the same, the obstacles will be different",340, 185)
  text( "Instead of the bullet now there will be a bomb that will explode",340, 230)
  text("You have to dodge the bomb and collect coins to win" ,340, 280)
- text("Get 600 point to win.. ALL THE BEST",340, 330)
- text("PRESS SPACE TO CONTINUE", 350, 420)
+ text("You can reduce the player's scale to get between the ice obstacles",340,330)
+ text("Get 1000 point to win.. ALL THE BEST",340, 400)
+ text("PRESS SPACE TO CONTINUE", 350, 450)
 
 
 
@@ -227,7 +226,7 @@ function draw() {
 }
 
 if(gameState===4){
-createCanvas(displayWidth-50,displayHeight-50)
+createCanvas(displayWidth,displayHeight)
 
   
     mainbg.visible=true
@@ -281,22 +280,49 @@ createCanvas(displayWidth-50,displayHeight-50)
 }
   
 
- 
+ if(score===1000&&gameState===4){
+   gameState=5
+ }
   
+ if(gameState===5){
+  createCanvas(displayWidth, displayHeight)
+   background("black")
+
+ bg.visible=false;
+ start.visible =false;;
+ play.visible=false;;
+ mainbg.visible=false;
+ground.visible = false;
+boy.visible = false;
+Obstacles2Group.destroyEach();
+bombGroup.destroyEach();
+coinGroup.destroyEach();
+ObstaclesGroup.destroyEach();
+
+fill("aqua")
+textSize(25)
+textStyle(BOLD)
+text("CONGRATULATIONS!! YOU HAVE WON THE GAME",300,230)
+
+ }
+
  
+
   
  
    drawSprites();
    if(gameState===2){
      fill("black")
    textSize(20)
-  text("Score:"+score,200,35)
+   textStyle(BOLD)
+  text("Score:"+score,450,35)
    }
 
    if(gameState===4){
     fill("black")
   textSize(20)
- text("Score:"+score,200,35)
+  textStyle(BOLD)
+ text("Score:"+score,450,35)
   }
 
   
@@ -325,7 +351,7 @@ createCanvas(displayWidth-50,displayHeight-50)
  }
  function spawnObstacles(){
    if(frameCount%150===0){
-  obstacle = createSprite(1800,500,10,40)
+  obstacle = createSprite(1800,540,10,40)
      obstacle.velocityX = -6;
      obstacle.scale = 0.25;
 
@@ -358,7 +384,7 @@ createCanvas(displayWidth-50,displayHeight-50)
  }
 
   function spawnCoins(){
-    if(frameCount%110===0){
+    if(frameCount%100===0){
     var coin = createSprite(600,270,10,40)
     coin.velocityX = -9;
     coin.y = Math.round(random(30,280));
@@ -370,21 +396,21 @@ createCanvas(displayWidth-50,displayHeight-50)
   }
 
   function spawnObstacle2(){
-    if(frameCount%50===0){
-      Ob = createSprite(600,170,10,40)
+    if(frameCount%200===0){
+      Ob = createSprite(1800,470,10,40)
       Ob.addImage(Obstacleimg)
          Ob.velocityX = -6;
-         Ob.scale = 0.1;
+         Ob.scale = 0.2;
         ObstaclesGroup.add(Ob)
        }
   }
 
   function Obstacles3(){
     if(frameCount%160===0){
-      var obst = createSprite(600,30,10,40)
+      var obst = createSprite(600,60,10,40)
       obst.addImage(ObstacleImg)
          obst.velocityX = -6;
-         obst.scale = 0.1;
+         obst.scale = 0.2;
         Obstacles2Group.add(obst)
        }
   }
@@ -395,7 +421,7 @@ createCanvas(displayWidth-50,displayHeight-50)
       bomb.velocityX = -15;
       bomb.y = Math.round(random(50,300));
       bomb.addImage(bombimg);
-      bomb.scale = 0.2;
+      bomb.scale = 0.4;
   
       bombGroup.add(bomb)
     }
